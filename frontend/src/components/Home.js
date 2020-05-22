@@ -8,7 +8,12 @@ const Home = ({ history }) => {
         <h1 className="categories-title">Severino Construction</h1>
       </div>
       <div className="categories">
-        <div className="category-box">
+        <div
+          className="category-box"
+          onClick={() => {
+            history.push('/equipment');
+          }}
+        >
           <i class="fas fa-snowplow"></i>
           &nbsp; EQUIPMENT
         </div>

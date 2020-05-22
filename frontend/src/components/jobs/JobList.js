@@ -43,7 +43,6 @@ const JobList = ({ history }) => {
   ];
 
   function openModal() {
-    console.log('openn');
     setIsOpen(true);
   }
 
@@ -73,10 +72,7 @@ const JobList = ({ history }) => {
         style={modalStyle}
         className="Modal"
       >
-        <div className="form-close" onClick={closeModal}>
-          <i className="fas fa-times"></i>
-        </div>
-        <JobForm />
+        <JobForm close={closeModal} />
       </Modal>
       <div className="job-list">
         {jobs.map((job) => {

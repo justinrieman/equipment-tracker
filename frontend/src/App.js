@@ -4,6 +4,7 @@ import Home from './components/Home';
 import Signup from './components/Signup';
 import Login from './components/Login';
 import JobList from './components/jobs/JobList';
+import EquipmentList from './components/equipment/EquipmentList';
 
 import './App.css';
 
@@ -15,6 +16,7 @@ function App() {
         <Route path="/signup" exact component={Signup} />
         <Route path="/login" exact component={Login} />
         <Route path="/jobs" exact component={JobList} />
+        <Route path="/equipment" exact component={EquipmentList} />
         <Route path="/" render={() => <div>404</div>} />
       </Switch>
     </BrowserRouter>

@@ -55,12 +55,13 @@
   justify-content: center;
   position: fixed;
   top: 0;
+  z-index: 0;
 }
 
 .category-title {
   margin: 0;
   padding: 1rem;
-  font-size: 3rem;
+  font-size: 2.5rem;
   color: white;
   flex: 5;
 }
@@ -88,6 +89,7 @@
 .job-list {
   position: relative;
   top: 15vh;
+  z-index: -1;
 }
 
 .job-label {
@@ -114,6 +116,41 @@
   color: rgb(92, 92, 92);
 }
 
+/* Equipment */
+
+.equipment-selection {
+  position: absolute;
+  top: 15vh;
+  width: 100vw;
+  height: 85vh;
+}
+
+.equipment-box {
+  font-size: 1.2rem;
+  height: 27.5vh;
+  width: 35vw;
+  justify-self: center;
+  align-self: center;
+  background-color: white;
+  color: black;
+  border-radius: 10px;
+  box-shadow: 0px 0 10px rgba(126, 126, 126, 0.523);
+  display: inline-block;
+  margin: 10vh 7vw 0;
+  text-align: center;
+}
+
+.equipment-box:hover {
+  background-color: rgb(45, 45, 45);
+  color: white;
+  cursor: pointer;
+}
+
+.equipment-box i {
+  font-size: 2rem;
+  margin-top: 7vh;
+}
+
 /* Forms */
 
 .Modal {
@@ -121,13 +158,72 @@
   position: relative;
   height: 100vh;
   width: 100vw;
+  overflow: scroll;
+}
+
+.form-header {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  height: 15vh;
+  text-align: center;
 }
 
 .form-close {
   color: white;
   font-size: 2rem;
   cursor: pointer;
-  position: absolute;
-  right: 1.5rem;
-  top: 1.5rem;
+  flex: 1;
+}
+
+.form-container {
+  color: white;
+  height: 100vh;
+  width: 100vw;
+}
+
+.form-title {
+  font-size: 2.5rem;
+  flex: 5;
+}
+
+.form-input-container {
+  text-align: left;
+  display: flex;
+  flex-direction: column;
+  width: 75%;
+  margin: 2rem auto 0;
+}
+
+.form-label {
+  font-size: 1.5rem;
+  font-weight: 500;
+  margin-bottom: 1rem;
+}
+
+.form-input {
+  margin-bottom: 2.5rem;
+  font-size: 1.3rem;
+  padding: 0.7rem;
+  color: white;
+  background-color: rgba(255, 255, 255, 0.345);
+  border: none;
+  border-radius: 5px;
+  outline: white;
+}
+
+.form-btn {
+  font-size: 1.5rem;
+  cursor: pointer;
+  border-radius: 5px;
+  outline: none;
+  padding: 0.7rem;
+  width: 45%;
+  margin-top: 1rem;
+  align-self: flex-end;
+}
+
+.form-btn:hover {
+  background: black;
+  color: white;
 }
