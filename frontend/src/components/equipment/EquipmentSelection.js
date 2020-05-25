@@ -1,26 +1,47 @@
 import React from 'react';
+import { withRouter } from 'react-router-dom';
 
 const EquipmentSelection = ({ history }) => {
   return (
     <div className="equipment-selection">
-      <div className="equipment-box equip-machines">
-        <i class="fas fa-snowplow"></i>
+      <div
+        className="equipment-box equip-machines"
+        onClick={() => {
+          history.push('/equipment/machines');
+        }}
+      >
+        <i className="fas fa-snowplow"></i>
         <p>MACHINES</p>
       </div>
-      <div className="equipment-box equip-shoring">
-        <i class="fas fa-boxes"></i>
+      <div
+        className="equipment-box equip-shoring"
+        onClick={() => {
+          history.push('/equipment/shoring');
+        }}
+      >
+        <i className="fas fa-boxes"></i>
         <p>SHORING</p>
       </div>
-      <div className="equipment-box equip-rentals">
-        <i class="fas fa-tags"></i>
+      <div
+        className="equipment-box equip-rentals"
+        onClick={() => {
+          history.push('/equipment/rentals');
+        }}
+      >
+        <i className="fas fa-tags"></i>
         <p>RENTALS</p>
       </div>
-      <div className="equipment-box equip-other">
-        <i class="fas fa-ellipsis-h"></i>
+      <div
+        className="equipment-box equip-other"
+        onClick={() => {
+          history.push('/equipment/other');
+        }}
+      >
+        <i className="fas fa-ellipsis-h"></i>
         <p>OTHER</p>
       </div>
     </div>
   );
 };
 
-export default EquipmentSelection;
+export default withRouter(EquipmentSelection);

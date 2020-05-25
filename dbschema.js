@@ -4,6 +4,8 @@ let db = {
   equipment: [
     {
       _id: 'dhakl24k29fajslk',
+      type: 'Machine',
+      name: 'Cat',
       brand: 'Cat',
       model: 'GHEx 42415',
       image: 'something.jpeg',

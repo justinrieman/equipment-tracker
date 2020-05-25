@@ -1,5 +1,4 @@
 import React from 'react';
-import { Link } from 'react-router-dom';
 
 const Home = ({ history }) => {
   return (
@@ -14,7 +13,7 @@ const Home = ({ history }) => {
             history.push('/equipment');
           }}
         >
-          <i class="fas fa-snowplow"></i>
+          <i className="fas fa-snowplow"></i>
           &nbsp; EQUIPMENT
         </div>
         <div
@@ -23,7 +22,7 @@ const Home = ({ history }) => {
             history.push('/jobs');
           }}
         >
-          <i class="fas fa-globe-americas"></i>
+          <i className="fas fa-globe-americas"></i>
           &nbsp; JOBS
         </div>
       </div>

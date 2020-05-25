@@ -5,6 +5,10 @@ import Signup from './components/Signup';
 import Login from './components/Login';
 import JobList from './components/jobs/JobList';
 import EquipmentList from './components/equipment/EquipmentList';
+import MachineList from './components/equipment/machines/MachineList';
+import ShoringList from './components/equipment/shoring/ShoringList';
+import RentalList from './components/equipment/rentals/RentalList';
+import OtherList from './components/equipment/other/OtherList';
 
 import './App.css';
 
@@ -17,6 +21,10 @@ function App() {
         <Route path="/login" exact component={Login} />
         <Route path="/jobs" exact component={JobList} />
         <Route path="/equipment" exact component={EquipmentList} />
+        <Route path="/equipment/machines" exact component={MachineList} />
+        <Route path="/equipment/shoring" exact component={ShoringList} />
+        <Route path="/equipment/rentals" exact component={RentalList} />
+        <Route path="/equipment/other" exact component={OtherList} />
         <Route path="/" render={() => <div>404</div>} />
       </Switch>
     </BrowserRouter>
