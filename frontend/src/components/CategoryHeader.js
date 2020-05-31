@@ -6,7 +6,7 @@ Modal.setAppElement('#root');
 
 const CategoryHeader = (props) => {
   const modalStyle = {
-    content: {},
+    overlay: { zIndex: 1000 },
   };
 
   const [modalIsOpen, setIsOpen] = useState(false);

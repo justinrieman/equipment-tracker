@@ -1,7 +1,7 @@
 import React from 'react';
 import { withRouter } from 'react-router-dom';
 import OtherForm from './OtherForm';
-import OtherLabel from './OtherLabel';
+import EquipmentLabel from '../EquipmentLabel';
 import CategoryHeader from '../../CategoryHeader';
 
 const OtherList = ({ history }) => {
@@ -13,7 +13,7 @@ const OtherList = ({ history }) => {
         form={<OtherForm />}
       />
       <div className="job-list">
-        <OtherLabel />
+        <EquipmentLabel />
       </div>
     </div>
   );

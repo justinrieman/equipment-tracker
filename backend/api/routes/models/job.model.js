@@ -5,6 +5,7 @@ const jobSchema = new mongoose.Schema({
   jobName: { type: String, required: true },
   jobNumber: { type: String, required: true },
   address: String,
+  equipment: [String],
 });
 
 module.exports = mongoose.model('Job', jobSchema);

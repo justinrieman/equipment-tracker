@@ -1,7 +1,7 @@
 import React from 'react';
 import { withRouter } from 'react-router-dom';
 import ShoringForm from './ShoringForm';
-import ShoringLabel from './ShoringLabel';
+import EquipmentLabel from '../EquipmentLabel';
 import CategoryHeader from '../../CategoryHeader';
 
 const ShoringList = ({ history }) => {
@@ -13,7 +13,7 @@ const ShoringList = ({ history }) => {
         form={<ShoringForm />}
       />
       <div className="job-list">
-        <ShoringLabel />
+        <EquipmentLabel />
       </div>
     </div>
   );

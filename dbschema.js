@@ -18,6 +18,7 @@ let db = {
       jobName: 'Tiffin Pointe',
       jobNumber: '2030',
       address: '3412 E Market St, Tiffin, OH',
+      equipment: [{ _id: 'dhakl24k29fajslk' }],
     },
   ],
 };
