@@ -8,8 +8,13 @@ const JobList = () => {
   const [jobs, setJobs] = useState([]);
 
   async function fetchData() {
-    const result = await axios('http://localhost:5000/jobs');
-    console.log(result.data.jobs);
+    const result = await axios({
+      url: 'http://localhost:5000/jobs',
+      method: 'GET',
+      headers: {
+        user: 'idk',
+      },
+    });
 
     setJobs(result.data.jobs);
   }

@@ -5,6 +5,7 @@ const mongoose = require('mongoose');
 const Job = require('./models/job.model');
 
 router.get('/', (req, res, next) => {
+  console.log(req.headers);
   Job.find()
     .exec()
     .then((docs) => {
@@ -47,6 +48,7 @@ router.get('/:id', (req, res, next) => {
 router.post('/', (req, res, next) => {
   const job = new Job({
     _id: new mongoose.Types.ObjectId(),
+    user: req.body.user,
     jobName: req.body.jobName,
     jobNumber: req.body.jobNumber,
     address: req.body.address,
@@ -60,6 +62,7 @@ router.post('/', (req, res, next) => {
         message: 'Job created successfully!',
         createdJob: {
           _id: result._id,
+          user: req.body.user,
           jobName: result.jobName,
           jobNumber: result.jobNumber,
           address: result.address,

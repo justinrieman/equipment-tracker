@@ -1,60 +1,92 @@
 import React, { useState } from 'react';
+import { Link } from 'react-router-dom';
 import axios from 'axios';
 
 const Signup = () => {
-  const [enteredEmail, setEnteredEmail] = useState('');
-  const [enteredPassword, setEnteredPassword] = useState('');
+  const [signupData, setSignupData] = useState({
+    company: '',
+    email: '',
+    password: '',
+  });
 
-  const emailHandler = (e) => {
-    const emailValue = e.target.value;
-    console.log(emailValue);
+  const [errors, setErrors] = useState({});
 
-    setEnteredEmail(emailValue);
-  };
+  const handleInput = (e) => {
+    const { name, value } = e.target;
 
-  const passwordHandler = (e) => {
-    const passwordValue = e.target.value;
-    console.log(passwordValue);
-    setEnteredPassword(passwordValue);
+    setSignupData((prevData) => {
+      return {
+        ...prevData,
+        [name]: value,
+      };
+    });
   };
 
   const handleSubmit = (e) => {
     e.preventDefault();
-    console.log(enteredEmail, enteredPassword);
 
     axios
       .post('http://localhost:5000/users/signup', {
-        email: enteredEmail,
-        password: enteredPassword,
+        company: signupData.company,
+        email: signupData.email,
+        password: signupData.password,
       })
       .then((response) => {
         console.log(response);
       })
-      .catch((error) => {
-        console.log('Theres an error: ' + error);
+      .catch((err) => {
+        setErrors(err.response.data);
+        console.log(err.response.data);
       });
   };
 
   return (
-    <div>
-      <h1>Signup</h1>
-      <label htmlFor="email">Email:</label>
-      <input
-        type="text"
-        name="email"
-        onChange={emailHandler}
-        value={enteredEmail}
-      ></input>
-      <label htmlFor="password">Password:</label>
-      <input
-        type="text"
-        name="password"
-        onChange={passwordHandler}
-        value={enteredPassword}
-      ></input>
-      <button type="submit" onClick={handleSubmit}>
-        Submit
-      </button>
+    <div className="signup-container">
+      <img className="logo" src={require('../images/logo.png')}></img>
+      <h1>Sign up</h1>
+      <form className="signup-form">
+        <label className="signup-label" htmlFor="company">
+          Company
+          {errors.company && (
+            <span className="error-text">{errors.company}</span>
+          )}
+        </label>
+        <input
+          type="text"
+          name="company"
+          className="signup-input"
+          onChange={handleInput}
+        ></input>
+        <label className="signup-label" htmlFor="email">
+          Email
+          {errors.email && <span className="error-text">{errors.email}</span>}
+        </label>
+        <input
+          type="text"
+          name="email"
+          className="signup-input"
+          onChange={handleInput}
+        ></input>
+        <label className="signup-label" htmlFor="password">
+          Password
+          {errors.password && (
+            <span className="error-text">{errors.password}</span>
+          )}
+        </label>
+        <input
+          type="password"
+          name="password"
+          className="signup-input"
+          onChange={handleInput}
+        ></input>
+        <button className="signup-btn" type="submit" onClick={handleSubmit}>
+          Sign up
+        </button>
+        <div className="signup-message">
+          <p>Already registered?</p>
+          <Link to="/login">Login</Link>
+        </div>
+      </form>
     </div>
   );
 };

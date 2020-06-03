@@ -1,12 +1,20 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import axios from 'axios';
+import jwtDecode from 'jwt-decode';
 
 const JobForm = (props) => {
+  const [user, setUser] = useState('');
   const [jobFormData, setJobFormData] = useState({
     jobName: '',
     jobNumber: '',
     address: '',
   });
+
+  useEffect(() => {
+    const token = localStorage.token;
+    const decodedToken = jwtDecode(token);
+    setUser(decodedToken.userId);
+  }, []);
 
   const handleInputChange = (e) => {
     const { name, value } = e.target;
@@ -22,6 +30,7 @@ const JobForm = (props) => {
   const postJob = (e) => {
     e.preventDefault();
     const createdJob = {
+      user: user,
       jobName: jobFormData.jobName,
       jobNumber: jobFormData.jobNumber,
       address: jobFormData.address,

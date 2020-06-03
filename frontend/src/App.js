@@ -1,5 +1,7 @@
 import React from 'react';
 import { BrowserRouter, Route, Switch } from 'react-router-dom';
+
+import AuthRoute from './util/AuthRoute';
 import Home from './components/Home';
 import Signup from './components/Signup';
 import Login from './components/Login';
@@ -17,16 +19,16 @@ function App() {
   return (
     <BrowserRouter>
       <Switch>
-        <Route path="/" exact component={Home} />
+        <AuthRoute path="/" exact component={Home} />
         <Route path="/signup" exact component={Signup} />
         <Route path="/login" exact component={Login} />
-        <Route path="/jobs" exact component={JobList} />
-        <Route path="/jobs/:id" exact component={Job} />
-        <Route path="/equipment" exact component={EquipmentList} />
-        <Route path="/equipment/machines" exact component={MachineList} />
-        <Route path="/equipment/shoring" exact component={ShoringList} />
-        <Route path="/equipment/rentals" exact component={RentalList} />
-        <Route path="/equipment/other" exact component={OtherList} />
+        <AuthRoute path="/jobs" exact component={JobList} />
+        <AuthRoute path="/jobs/:id" exact component={Job} />
+        <AuthRoute path="/equipment" exact component={EquipmentList} />
+        <AuthRoute path="/equipment/machines" exact component={MachineList} />
+        <AuthRoute path="/equipment/shoring" exact component={ShoringList} />
+        <AuthRoute path="/equipment/rentals" exact component={RentalList} />
+        <AuthRoute path="/equipment/other" exact component={OtherList} />
         <Route path="/" render={() => <div>404</div>} />
       </Switch>
     </BrowserRouter>
