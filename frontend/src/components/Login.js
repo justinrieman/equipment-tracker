@@ -2,6 +2,13 @@ import React, { useState } from 'react';
 import { Link } from 'react-router-dom';
 import axios from 'axios';
 
+// TEST
+import { connect } from 'react-redux';
+import { getJobs } from '../redux/actions/jobAction';
+import { setUser } from '../redux/actions/userAction';
+import PropTypes from 'prop-types';
+// TEST
+
 const Login = (props) => {
   const [loginData, setLoginData] = useState({
     email: '',
@@ -30,7 +37,12 @@ const Login = (props) => {
         password: loginData.password,
       })
       .then((response) => {
-        localStorage.setItem('token', response.data.token);
+        const token = response.data.token;
+        localStorage.setItem('token', token);
+
+        props.setUser(token);
+        props.getJobs();
+
         props.history.push('/');
       })
       .catch((err) => {
@@ -41,7 +53,11 @@ const Login = (props) => {
 
   return (
     <div className="signup-container">
-      <img className="logo" src={require('../images/logo.png')}></img>
+      <img
+        className="logo"
+        src={require('../images/logo.png')}
+        alt="logo"
+      ></img>
       <h1>Log in</h1>
       <form className="signup-form">
         <label className="signup-label" htmlFor="email">
@@ -79,4 +95,18 @@ const Login = (props) => {
   );
 };
 
-export default Login;
+//TEST
+Login.propTypes = {
+  setUser: PropTypes.func.isRequired,
+  getJobs: PropTypes.func.isRequired,
+  job: PropTypes.object.isRequired,
+  user: PropTypes.object.isRequired,
+};
+
+const mapStateToProps = (state) => ({
+  job: state.job,
+  user: state.user,
+});
+//TEST
+
+export default connect(mapStateToProps, { setUser, getJobs })(Login);

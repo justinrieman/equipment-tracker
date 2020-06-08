@@ -1,13 +1,24 @@
-import React from 'react';
+import React, { useEffect, useState } from 'react';
 import { withRouter } from 'react-router-dom';
 import IndividualHeader from '.././IndividualHeader';
 
+import { connect } from 'react-redux';
+import PropTypes from 'prop-types';
+
 const Job = (props) => {
+  const [job, setJob] = useState({});
   const jobId = props.match.params.id;
+  const { jobs } = props.job;
+
+  useEffect(() => {
+    setJob(jobs.filter((job) => job._id === jobId)[0]);
+
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, []);
 
   return (
     <div>
-      <IndividualHeader title="Tiffin Pointe" backRoute="jobs" />
+      <IndividualHeader title={job.jobName} backRoute="jobs" />
 
       <div className="job-body">
         <h1>Equipment</h1>
@@ -54,4 +65,12 @@ const Job = (props) => {
   );
 };
 
-export default withRouter(Job);
+Job.propTypes = {
+  job: PropTypes.object.isRequired,
+};
+
+const mapStateToProps = (state) => ({
+  job: state.job,
+});
+
+export default connect(mapStateToProps)(withRouter(Job));

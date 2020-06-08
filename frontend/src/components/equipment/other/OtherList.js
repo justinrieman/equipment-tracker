@@ -4,7 +4,7 @@ import OtherForm from './OtherForm';
 import EquipmentLabel from '../EquipmentLabel';
 import CategoryHeader from '../../CategoryHeader';
 
-const OtherList = ({ history }) => {
+const OtherList = () => {
   return (
     <div>
       <CategoryHeader
@@ -13,7 +13,12 @@ const OtherList = ({ history }) => {
         form={<OtherForm />}
       />
       <div className="job-list">
-        <EquipmentLabel />
+        <EquipmentLabel
+          brand="cat"
+          model="T590"
+          jobLocation="tiffin"
+          img="https://cdn.ironpla.net/i/1935/235/1935235_3742_159_0001.jpg"
+        />
       </div>
     </div>
   );

@@ -3,10 +3,14 @@ const router = express.Router();
 const mongoose = require('mongoose');
 
 const Job = require('./models/job.model');
+const Equipment = require('./models/equipment.model');
 
 router.get('/', (req, res, next) => {
-  console.log(req.headers);
-  Job.find()
+  const userId = req.headers.userid;
+  Job.find({ userId: userId })
+    .populate({
+      path: 'equipment',
+    })
     .exec()
     .then((docs) => {
       const response = {
@@ -29,12 +33,21 @@ router.get('/', (req, res, next) => {
 
 router.get('/:id', (req, res, next) => {
   const id = req.params.id;
+  let jobEquipment;
+  Equipment.find({ equipLocationId: id })
+    .exec()
+    .then((doc) => {
+      if (doc) {
+        jobEquipment = doc;
+      }
+    });
   Job.findById(id)
     .exec()
     .then((doc) => {
       if (doc) {
         res.status(200).json({
           job: doc,
+          equipment: jobEquipment,
         });
       } else {
         res.status(404).json({ message: 'No job found' });
@@ -48,7 +61,7 @@ router.get('/:id', (req, res, next) => {
 router.post('/', (req, res, next) => {
   const job = new Job({
     _id: new mongoose.Types.ObjectId(),
-    user: req.body.user,
+    userId: req.body.userId,
     jobName: req.body.jobName,
     jobNumber: req.body.jobNumber,
     address: req.body.address,
@@ -62,7 +75,7 @@ router.post('/', (req, res, next) => {
         message: 'Job created successfully!',
         createdJob: {
           _id: result._id,
-          user: req.body.user,
+          userId: req.body.userId,
           jobName: result.jobName,
           jobNumber: result.jobNumber,
           address: result.address,
@@ -77,7 +90,21 @@ router.post('/', (req, res, next) => {
 
 router.patch('/:jobId', (req, res, next) => {
   const jobId = req.params.jobId;
-  res.status(200).json({ message: `PATCH request for ${jobId}` });
+
+  if (req.body.equipmentId) {
+    Job.update({ _id: jobId }, { $push: { equipment: [req.body.equipmentId] } })
+      .exec()
+      .then((result) => {
+        res.status(201).json({ message: 'Updated is successful' });
+      })
+      .catch((err) => {
+        res.status(500).json({ error: err });
+      });
+  }
+
+  res.status(200).json({ message: 'Update is successful' });
+
+  // Job.findByIdAndUpdate(jobId)
 });
 
 module.exports = router;

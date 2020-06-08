@@ -42,7 +42,11 @@ const Signup = () => {
 
   return (
     <div className="signup-container">
-      <img className="logo" src={require('../images/logo.png')}></img>
+      <img
+        className="logo"
+        src={require('../images/logo.png')}
+        alt="logo"
+      ></img>
       <h1>Sign up</h1>
       <form className="signup-form">
         <label className="signup-label" htmlFor="company">

@@ -1,6 +1,9 @@
 import React, { useState, useEffect } from 'react';
-import axios from 'axios';
 import jwtDecode from 'jwt-decode';
+
+import { connect } from 'react-redux';
+import { addJob, getJobs } from '../../redux/actions/jobAction';
+import PropTypes from 'prop-types';
 
 const JobForm = (props) => {
   const [user, setUser] = useState('');
@@ -30,22 +33,14 @@ const JobForm = (props) => {
   const postJob = (e) => {
     e.preventDefault();
     const createdJob = {
-      user: user,
+      userId: user,
       jobName: jobFormData.jobName,
       jobNumber: jobFormData.jobNumber,
       address: jobFormData.address,
     };
 
-    axios
-      .post('http://localhost:5000/jobs', createdJob)
-      .then((res) => {
-        console.log(res);
-        console.log(res.data);
-      })
-      .then(() => {
-        props.close();
-        props.fetchData();
-      });
+    props.addJob(createdJob);
+    props.close();
   };
 
   return (
@@ -97,7 +92,16 @@ const JobForm = (props) => {
   );
 };
 
-export default JobForm;
+JobForm.propTypes = {
+  getJobs: PropTypes.func.isRequired,
+  addJob: PropTypes.func.isRequired,
+};
+
+const mapStateToProps = (state) => ({
+  job: state.job,
+});
+
+export default connect(mapStateToProps, { addJob, getJobs })(JobForm);
 
 //JobName
 //JobNumber

@@ -1,7 +1,13 @@
 import React, { useState } from 'react';
 import axios from 'axios';
 
+import { connect } from 'react-redux';
+import PropTypes from 'prop-types';
+
 const MachineForm = (props) => {
+  const { user } = props.user;
+  const { jobs } = props.job;
+
   const [selectedImage, setSelectedImage] = useState(null);
   const [machineFormData, setMachineFormData] = useState({
     equipBrand: '',
@@ -13,9 +19,7 @@ const MachineForm = (props) => {
   const handleImageSelection = (e) => {
     const file = e.target.files[0];
     const reader = new FileReader();
-    const url = reader.readAsDataURL(file);
-
-    console.log(file);
+    reader.readAsDataURL(file);
 
     reader.onloadend = function (e) {
       setSelectedImage(reader.result);
@@ -43,18 +47,38 @@ const MachineForm = (props) => {
   const addMachine = (e) => {
     e.preventDefault();
 
+    let equipLocationId;
+
+    // to get equipLocationId
+    if (machineFormData.equipLocation) {
+      const selectedJob = jobs.filter(
+        (job) => job.jobName === machineFormData.equipLocation
+      );
+      equipLocationId = selectedJob[0]._id;
+      console.log(equipLocationId);
+    }
+
     const fd = new FormData();
+    fd.append('userId', user);
     fd.append('equipType', 'machine');
     fd.append('equipBrand', machineFormData.equipBrand);
     fd.append('equipModel', machineFormData.equipModel);
     fd.append('equipImage', machineFormData.equipImage);
     fd.append('equipLocation', machineFormData.equipLocation);
+    fd.append('equipLocationId', equipLocationId);
 
     axios
       .post('http://localhost:5000/equipment', fd)
       .then((res) => {
-        console.log(res);
-        console.log(res.data);
+        console.log(res.data.createdEquipment._id);
+        // const machineId = res.data.createdEquipment._id;
+        // axios
+        //   .patch(`http://localhost:5000/jobs/${equipLocationId}`, {
+        //     equipmentId: machineId,
+        //   })
+        //   .then((res) => {
+        //     console.log(res);
+        //   });
       })
       .then(() => {
         props.close();
@@ -97,12 +121,24 @@ const MachineForm = (props) => {
           Location
         </label>
 
-        <input
+        <select
           className="form-input"
           type="text"
           name="equipLocation"
           onChange={handleInputChange}
-        ></input>
+          defaultValue=""
+        >
+          <option value="" disabled>
+            Choose a Location
+          </option>
+          {jobs.map((job) => {
+            return (
+              <option key={job._id} value={job.jobName}>
+                {job.jobName}
+              </option>
+            );
+          })}
+        </select>
         <label className="form-label" htmlFor="equipImage">
           Select Image
         </label>
@@ -120,4 +156,15 @@ const MachineForm = (props) => {
   );
 };
 
-export default MachineForm;
+MachineForm.propTypes = {
+  job: PropTypes.object.isRequired,
+
+  user: PropTypes.object.isRequired,
+};
+
+const mapStateToProps = (state) => ({
+  job: state.job,
+  user: state.user,
+});
+
+export default connect(mapStateToProps)(MachineForm);

@@ -32,8 +32,8 @@ const upload = multer({
 });
 
 router.get('/', (req, res, next) => {
-  console.log(req.headers.equiptype);
-  Equipment.find({ equipType: req.headers.equiptype })
+  const userId = req.query.userId;
+  Equipment.find({ userId: userId })
     .exec()
     .then((docs) => {
       const response = {
@@ -64,11 +64,13 @@ router.get('/:equipmentId', (req, res, next) => {
 router.post('/', upload.single('equipImage'), (req, res, next) => {
   const equipment = new Equipment({
     _id: new mongoose.Types.ObjectId(),
+    userId: req.body.userId,
     equipType: req.body.equipType,
     equipBrand: req.body.equipBrand,
     equipModel: req.body.equipModel,
     equipImage: req.file ? req.file.path : 'uploads/no-img.png',
     equipLocation: req.body.equipLocation,
+    equipLocationId: req.body.equipLocationId,
   });
 
   equipment
@@ -78,11 +80,13 @@ router.post('/', upload.single('equipImage'), (req, res, next) => {
         message: 'Created successfully',
         createdEquipment: {
           _id: result._id,
+          userId: result.userId,
           equipType: result.equipType,
           equipBrand: result.equipBrand,
           equipModel: result.equipModel,
           equipImage: result.equipImage,
           equipLocation: result.equipLocation,
+          equipLocationId: result.equipLocationId,
         },
       });
     })

@@ -1,6 +1,6 @@
 import React from 'react';
 
-const Home = ({ history }) => {
+const Home = (props) => {
   return (
     <div>
       <div className="categories-header">
@@ -10,7 +10,7 @@ const Home = ({ history }) => {
         <div
           className="category-box"
           onClick={() => {
-            history.push('/equipment');
+            props.history.push('/equipment');
           }}
         >
           <i className="fas fa-snowplow"></i>
@@ -19,7 +19,7 @@ const Home = ({ history }) => {
         <div
           className="category-box"
           onClick={() => {
-            history.push('/jobs');
+            props.history.push('/jobs');
           }}
         >
           <i className="fas fa-globe-americas"></i>
