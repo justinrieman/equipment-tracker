@@ -27,7 +27,12 @@ const JobList = (props) => {
 
   return (
     <div>
-      <CategoryHeader title="Jobs" backRoute="/" form={<JobForm />} />
+      <CategoryHeader
+        title="Jobs"
+        backRoute="/"
+        icon="fas fa-plus"
+        form={<JobForm />}
+      />
       <div className="job-list">
         {jobs.map((job) => {
           return (

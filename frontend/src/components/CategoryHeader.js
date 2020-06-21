@@ -32,7 +32,7 @@ const CategoryHeader = (props) => {
         </div>
         <h1 className="category-title">{props.title}</h1>
         <div className="category-add" onClick={openModal}>
-          <i className="fas fa-plus"></i>
+          <i className={props.icon}></i>
         </div>
       </div>
       <Modal

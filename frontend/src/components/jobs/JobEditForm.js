@@ -1,18 +1,30 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
+import { withRouter } from 'react-router-dom';
 
 import { connect } from 'react-redux';
-import { addJob } from '../../redux/actions/jobAction';
+import { updateJob, deleteJob } from '../../redux/actions/jobAction';
 import PropTypes from 'prop-types';
 
-const JobForm = (props) => {
+const JobEditForm = (props) => {
   const { user } = props.user;
+  const { jobs } = props.job;
+
   const [jobFormData, setJobFormData] = useState({
     jobName: '',
     jobNumber: '',
     address: '',
   });
 
-  const [error, setError] = useState(null);
+  useEffect(() => {
+    let selectedJob = jobs.filter((job) => job._id === props.jobId)[0];
+    setJobFormData({
+      jobName: selectedJob.jobName,
+      jobNumber: selectedJob.jobNumber,
+      address: selectedJob.address,
+    });
+
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, []);
 
   const handleInputChange = (e) => {
     const { name, value } = e.target;
@@ -28,26 +40,27 @@ const JobForm = (props) => {
   const postJob = (e) => {
     e.preventDefault();
 
-    if (jobFormData.jobName.trim() === '') {
-      setError('Must enter a job name');
-    } else {
-      const createdJob = {
-        userId: user,
-        jobName: jobFormData.jobName,
-        jobNumber: jobFormData.jobNumber,
-        address: jobFormData.address,
-      };
+    const updatedJob = {
+      userId: user,
+      jobName: jobFormData.jobName,
+      jobNumber: jobFormData.jobNumber,
+      address: jobFormData.address,
+    };
 
-      props.addJob(createdJob);
-      props.close();
-    }
+    props.updateJob(props.jobId, updatedJob);
+    props.close();
+  };
+
+  const handleDelete = () => {
+    props.deleteJob(props.jobId);
+    props.history.push('/jobs');
   };
 
   return (
     <div className="form-container">
       <div className="form-header">
         <div className="form-close"></div>
-        <h1 className="form-title">New Job</h1>
+        <h1 className="form-title">Edit Job</h1>
         <div className="form-close" onClick={props.close}>
           <i className="fas fa-times"></i>
         </div>
@@ -56,7 +69,6 @@ const JobForm = (props) => {
       <form className="form-input-container">
         <label className="form-label" htmlFor="jobName">
           Job Name
-          {error && <span className="error-text">{error}</span>}
         </label>
         <input
           className="form-input"
@@ -64,6 +76,7 @@ const JobForm = (props) => {
           name="jobName"
           onChange={handleInputChange}
           value={jobFormData.jobName}
+          disabled
         ></input>
         <label className="form-label" htmlFor="jobNumber">
           Job Number
@@ -85,17 +98,32 @@ const JobForm = (props) => {
           onChange={handleInputChange}
           value={jobFormData.address}
         ></input>
-        <button type="submit" className="form-btn" onClick={postJob}>
-          Add Job
-        </button>
+        <div className="form-btn-group">
+          <button
+            type="submit"
+            className="form-btn form-btn-delete"
+            onClick={() =>
+              window.confirm('Are you sure you want to delete?')
+                ? handleDelete()
+                : null
+            }
+          >
+            Delete Job
+          </button>
+          <button type="submit" className="form-btn" onClick={postJob}>
+            Update
+          </button>
+        </div>
       </form>
     </div>
   );
 };
 
-JobForm.propTypes = {
-  addJob: PropTypes.func.isRequired,
+JobEditForm.propTypes = {
+  updateJob: PropTypes.func.isRequired,
+  deleteJob: PropTypes.func.isRequired,
   user: PropTypes.object.isRequired,
+  job: PropTypes.object.isRequired,
 };
 
 const mapStateToProps = (state) => ({
@@ -103,8 +131,6 @@ const mapStateToProps = (state) => ({
   job: state.job,
 });
 
-export default connect(mapStateToProps, { addJob })(JobForm);
-
-//JobName
-//JobNumber
-//Job Address
+export default connect(mapStateToProps, { updateJob, deleteJob })(
+  withRouter(JobEditForm)
+);

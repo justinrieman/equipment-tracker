@@ -89,22 +89,36 @@ router.post('/', (req, res, next) => {
 });
 
 router.patch('/:jobId', (req, res, next) => {
-  const jobId = req.params.jobId;
+  console.log(req.params.jobId);
+  console.log(req.body);
 
-  if (req.body.equipmentId) {
-    Job.update({ _id: jobId }, { $push: { equipment: [req.body.equipmentId] } })
-      .exec()
-      .then((result) => {
-        res.status(201).json({ message: 'Updated is successful' });
-      })
-      .catch((err) => {
-        res.status(500).json({ error: err });
+  Job.findOneAndUpdate({ _id: req.params.jobId }, req.body, { new: true })
+    .then((doc) => {
+      res.status(201).json({
+        message: 'Job updated successfully',
+        updatedJob: {
+          _id: doc._id,
+          userId: doc.userId,
+          jobName: doc.jobName,
+          jobNumber: doc.jobNumber,
+          address: doc.address,
+          equipment: doc.equipment,
+        },
       });
-  }
+    })
+    .catch((err) => {
+      res.status(500).json({ error: err });
+    });
+});
 
-  res.status(200).json({ message: 'Update is successful' });
-
-  // Job.findByIdAndUpdate(jobId)
+router.delete('/:jobId', (req, res, next) => {
+  Job.findById(req.params.jobId)
+    .then((item) =>
+      item
+        .remove()
+        .then(() => res.json({ message: 'Job deleted successfully' }))
+    )
+    .catch((err) => res.status(404).json({ err }));
 });
 
 module.exports = router;

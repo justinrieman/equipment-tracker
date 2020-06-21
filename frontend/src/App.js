@@ -12,6 +12,7 @@ import MachineList from './components/equipment/machines/MachineList';
 import ShoringList from './components/equipment/shoring/ShoringList';
 import RentalList from './components/equipment/rentals/RentalList';
 import OtherList from './components/equipment/other/OtherList';
+import EquipmentPage from './components/equipment/EquipmentPage';
 import NotFound from './components/NotFound';
 
 //Redux
@@ -31,10 +32,11 @@ function App() {
           <AuthRoute path="/jobs" exact component={JobList} />
           <AuthRoute path="/jobs/:id" exact component={Job} />
           <AuthRoute path="/equipment" exact component={EquipmentList} />
-          <AuthRoute path="/equipment/machines" exact component={MachineList} />
+          <AuthRoute path="/equipment/machine" exact component={MachineList} />
           <AuthRoute path="/equipment/shoring" exact component={ShoringList} />
-          <AuthRoute path="/equipment/rentals" exact component={RentalList} />
+          <AuthRoute path="/equipment/rental" exact component={RentalList} />
           <AuthRoute path="/equipment/other" exact component={OtherList} />
+          <AuthRoute path="/equipment/:id" exact component={EquipmentPage} />
           <Route path="/" render={() => <NotFound />} />
         </Switch>
       </BrowserRouter>

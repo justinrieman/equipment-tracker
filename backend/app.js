@@ -12,6 +12,7 @@ mongoose.connect(process.env.MONGO_ATLAS_URI, {
 });
 
 mongoose.set('useCreateIndex', true);
+mongoose.set('useFindAndModify', false);
 
 mongoose.connection.once('open', () => {
   console.log('Mongo connection established successfully');

@@ -9,6 +9,7 @@ const equipmentSchema = new mongoose.Schema({
   equipImage: String,
   equipLocation: String,
   equipLocationId: { type: mongoose.Schema.Types.ObjectId, ref: 'Job' },
+  available: Boolean,
 });
 
 module.exports = mongoose.model('Equipment', equipmentSchema);

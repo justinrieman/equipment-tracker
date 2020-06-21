@@ -7,7 +7,7 @@ const EquipmentSelection = ({ history }) => {
       <div
         className="equipment-box equip-machines"
         onClick={() => {
-          history.push('/equipment/machines');
+          history.push('/equipment/machine');
         }}
       >
         <i className="fas fa-snowplow"></i>
@@ -25,7 +25,7 @@ const EquipmentSelection = ({ history }) => {
       <div
         className="equipment-box equip-rentals"
         onClick={() => {
-          history.push('/equipment/rentals');
+          history.push('/equipment/rental');
         }}
       >
         <i className="fas fa-tags"></i>

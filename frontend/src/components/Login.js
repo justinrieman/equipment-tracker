@@ -5,6 +5,7 @@ import axios from 'axios';
 // TEST
 import { connect } from 'react-redux';
 import { getJobs } from '../redux/actions/jobAction';
+import { getEquipment } from '../redux/actions/equipmentAction';
 import { setUser } from '../redux/actions/userAction';
 import PropTypes from 'prop-types';
 // TEST
@@ -42,12 +43,12 @@ const Login = (props) => {
 
         props.setUser(token);
         props.getJobs();
+        props.getEquipment();
 
         props.history.push('/');
       })
       .catch((err) => {
         setErrors(err.response.data);
-        console.log(err.response.data);
       });
   };
 
@@ -99,6 +100,7 @@ const Login = (props) => {
 Login.propTypes = {
   setUser: PropTypes.func.isRequired,
   getJobs: PropTypes.func.isRequired,
+  getEquipment: PropTypes.func.isRequired,
   job: PropTypes.object.isRequired,
   user: PropTypes.object.isRequired,
 };
@@ -106,7 +108,10 @@ Login.propTypes = {
 const mapStateToProps = (state) => ({
   job: state.job,
   user: state.user,
+  equipment: state.equipment,
 });
 //TEST
 
-export default connect(mapStateToProps, { setUser, getJobs })(Login);
+export default connect(mapStateToProps, { setUser, getJobs, getEquipment })(
+  Login
+);

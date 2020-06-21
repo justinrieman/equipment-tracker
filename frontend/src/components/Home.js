@@ -1,10 +1,42 @@
-import React from 'react';
+import React, { useState } from 'react';
+import jwtDecode from 'jwt-decode';
+
+let token;
 
 const Home = (props) => {
+  if (localStorage.getItem('token')) {
+    token = jwtDecode(localStorage.getItem('token'));
+  }
+
+  const [isOpen, setIsOpen] = useState(false);
+
+  const signOut = () => {
+    localStorage.removeItem('token');
+    props.history.push('/login');
+  };
+
   return (
     <div>
-      <div className="categories-header">
-        <h1 className="categories-title">Severino Construction</h1>
+      <div
+        style={
+          isOpen === false
+            ? { transform: 'translateX(-100%)' }
+            : { transform: 'translateX(0)' }
+        }
+        className="sign-out"
+      >
+        <button onClick={signOut}>Sign Out</button>
+      </div>
+      <div className="category-header">
+        <div className="category-back"></div>
+        <h1 className="category-title">{token && token.company}</h1>
+        <div className="category-add" onClick={() => setIsOpen(!isOpen)}>
+          {isOpen ? (
+            <i className="fas fa-times"></i>
+          ) : (
+            <i className="fas fa-sign-out-alt"></i>
+          )}
+        </div>
       </div>
       <div className="categories">
         <div

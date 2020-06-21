@@ -1,33 +1,77 @@
-import React from 'react';
+import React, { useState, useEffect } from 'react';
 import { withRouter } from 'react-router-dom';
-import RentalForm from './RentalForm';
 import EquipmentLabel from '../EquipmentLabel';
+import EquipmentForm from '../EquipmentForm';
 import CategoryHeader from '../../CategoryHeader';
 
-const RentalList = ({ history }) => {
+import { connect } from 'react-redux';
+import PropTypes from 'prop-types';
+import { getJobs } from '../../../redux/actions/jobAction';
+import { setUser } from '../../../redux/actions/userAction';
+import { getEquipment } from '../../../redux/actions/equipmentAction';
+
+const RentalList = (props) => {
+  const [rentalList, setRentalList] = useState([]);
+  const { user } = props.user;
+  const { equipment } = props.equipment;
+
+  useEffect(() => {
+    if (!user) {
+      props.history.push('/equipment');
+    }
+
+    setRentalList(equipment.filter((item) => item.equipType === 'rental'));
+
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [equipment]);
+
   return (
     <div>
       <CategoryHeader
         title="Rentals"
         backRoute="/equipment"
-        form={<RentalForm />}
+        icon="fas fa-plus"
+        form={<EquipmentForm equipType="rental" />}
       />
-      <div className="job-list">
-        <EquipmentLabel
-          brand="Bobcat"
-          model="T590"
-          jobLocation="Tiffin Pointe"
-          img="https://cdn.ironpla.net/i/1935/235/1935235_3742_159_0001.jpg"
-        />
-        <EquipmentLabel
-          brand="Air Compressor #117"
-          model=""
-          jobLocation="Ashta Chemicals"
-          img="https://images-na.ssl-images-amazon.com/images/I/613METIImuL._AC_SY355_.jpg"
-        />
+      <div className="job-body">
+        {rentalList.length === 0 && <h1>No rentals available.</h1>}
+        <div className="individual-job-list">
+          {equipment
+            .filter((item) => item.equipType === 'rental')
+            .map((item) => {
+              return (
+                <EquipmentLabel
+                  key={item._id}
+                  id={item._id}
+                  brand={item.equipBrand}
+                  model={item.equipModel}
+                  jobLocation={item.equipLocation}
+                  img={'http://localhost:5000/' + item.equipImage}
+                  available={item.available}
+                />
+              );
+            })}
+        </div>
       </div>
     </div>
   );
 };
 
-export default withRouter(RentalList);
+RentalList.propTypes = {
+  job: PropTypes.object.isRequired,
+  getJobs: PropTypes.func.isRequired,
+  user: PropTypes.object.isRequired,
+  setUser: PropTypes.func.isRequired,
+  getEquipment: PropTypes.func.isRequired,
+  equipment: PropTypes.object.isRequired,
+};
+
+const mapStateToProps = (state) => ({
+  job: state.job,
+  user: state.user,
+  equipment: state.equipment,
+});
+
+export default connect(mapStateToProps, { setUser, getJobs, getEquipment })(
+  withRouter(RentalList)
+);

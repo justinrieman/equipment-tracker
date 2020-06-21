@@ -1,20 +1,34 @@
-import React, { useState } from 'react';
-import axios from 'axios';
+// To use:
+// <EquipmentForm equipType='' />
 
+import React, { useState, createRef } from 'react';
+
+// Redux Stuff
 import { connect } from 'react-redux';
 import PropTypes from 'prop-types';
+import { addEquipment } from '../../redux/actions/equipmentAction';
 
-const MachineForm = (props) => {
+const EquipmentForm = (props) => {
+  const formRef = createRef();
+
   const { user } = props.user;
   const { jobs } = props.job;
 
   const [selectedImage, setSelectedImage] = useState(null);
-  const [machineFormData, setMachineFormData] = useState({
+  const [equipmentFormData, setEquipmentFormData] = useState({
     equipBrand: '',
     equipModel: '',
     equipImage: null,
     equipLocation: '',
   });
+  const [error, setError] = useState(null);
+
+  //Catpitalize First Letter of equipType to use as title
+  // if equip type is other than use Item
+  const equipTypeTitle =
+    props.equipType === 'other'
+      ? 'Item'
+      : props.equipType.charAt(0).toUpperCase() + props.equipType.slice(1);
 
   const handleImageSelection = (e) => {
     const file = e.target.files[0];
@@ -25,7 +39,7 @@ const MachineForm = (props) => {
       setSelectedImage(reader.result);
     };
 
-    setMachineFormData((prevData) => {
+    setEquipmentFormData((prevData) => {
       return {
         ...prevData,
         equipImage: file,
@@ -36,7 +50,7 @@ const MachineForm = (props) => {
   const handleInputChange = (e) => {
     const { name, value } = e.target;
 
-    setMachineFormData((prevData) => {
+    setEquipmentFormData((prevData) => {
       return {
         ...prevData,
         [name]: value,
@@ -44,53 +58,43 @@ const MachineForm = (props) => {
     });
   };
 
-  const addMachine = (e) => {
+  const handleSubmit = (e) => {
     e.preventDefault();
 
-    let equipLocationId;
+    if (equipmentFormData.equipBrand.trim() === '') {
+      setError('Must enter a brand or name');
+      formRef.current.scrollTop = 0;
+    } else {
+      // to get equipLocationId
+      let equipLocationId;
 
-    // to get equipLocationId
-    if (machineFormData.equipLocation) {
-      const selectedJob = jobs.filter(
-        (job) => job.jobName === machineFormData.equipLocation
-      );
-      equipLocationId = selectedJob[0]._id;
-      console.log(equipLocationId);
+      if (equipmentFormData.equipLocation) {
+        const selectedJob = jobs.filter(
+          (job) => job.jobName === equipmentFormData.equipLocation
+        );
+        equipLocationId = selectedJob[0]._id;
+      }
+
+      const fd = new FormData();
+      fd.append('userId', user);
+      fd.append('equipType', props.equipType);
+      fd.append('equipBrand', equipmentFormData.equipBrand);
+      fd.append('equipModel', equipmentFormData.equipModel);
+      fd.append('equipImage', equipmentFormData.equipImage);
+      fd.append('equipLocation', equipmentFormData.equipLocation);
+      equipmentFormData.equipLocation &&
+        fd.append('equipLocationId', equipLocationId);
+
+      props.addEquipment(fd);
+      props.close();
     }
-
-    const fd = new FormData();
-    fd.append('userId', user);
-    fd.append('equipType', 'machine');
-    fd.append('equipBrand', machineFormData.equipBrand);
-    fd.append('equipModel', machineFormData.equipModel);
-    fd.append('equipImage', machineFormData.equipImage);
-    fd.append('equipLocation', machineFormData.equipLocation);
-    fd.append('equipLocationId', equipLocationId);
-
-    axios
-      .post('http://localhost:5000/equipment', fd)
-      .then((res) => {
-        console.log(res.data.createdEquipment._id);
-        // const machineId = res.data.createdEquipment._id;
-        // axios
-        //   .patch(`http://localhost:5000/jobs/${equipLocationId}`, {
-        //     equipmentId: machineId,
-        //   })
-        //   .then((res) => {
-        //     console.log(res);
-        //   });
-      })
-      .then(() => {
-        props.close();
-        props.fetchData();
-      });
   };
 
   return (
-    <div className="form-container">
+    <div className="form-container" ref={formRef}>
       <div className="form-header">
         <div className="form-close"></div>
-        <h1 className="form-title">New Machine</h1>
+        <h1 className="form-title">{`New ${equipTypeTitle}`}</h1>
         <div className="form-close" onClick={props.close}>
           <i className="fas fa-times"></i>
         </div>
@@ -99,6 +103,7 @@ const MachineForm = (props) => {
       <form className="form-input-container">
         <label className="form-label" htmlFor="equipBrand">
           Brand
+          {error && <span className="error-text">{error}</span>}
         </label>
         <input
           className="form-input"
@@ -148,18 +153,18 @@ const MachineForm = (props) => {
           name="equipImage"
         ></input>
         <img className="image-upload" src={selectedImage} alt=""></img>
-        <button type="submit" className="form-btn" onClick={addMachine}>
-          Add Machine
+        <button type="submit" className="form-btn" onClick={handleSubmit}>
+          {`Add ${equipTypeTitle}`}
         </button>
       </form>
     </div>
   );
 };
 
-MachineForm.propTypes = {
+EquipmentForm.propTypes = {
   job: PropTypes.object.isRequired,
-
   user: PropTypes.object.isRequired,
+  addEquipment: PropTypes.func.isRequired,
 };
 
 const mapStateToProps = (state) => ({
@@ -167,4 +172,4 @@ const mapStateToProps = (state) => ({
   user: state.user,
 });
 
-export default connect(mapStateToProps)(MachineForm);
+export default connect(mapStateToProps, { addEquipment })(EquipmentForm);

@@ -27,6 +27,7 @@ const AuthRoute = ({ component: Component, ...rest }) => {
     // if authenticated is true and user === null run redux actions to get all user data
     // this should set state if user refreshes page
     // authenticated is not true unless a refresh happens and token is still valid
+    console.log(authenticated);
     if (authenticated) {
       console.log();
     } else {

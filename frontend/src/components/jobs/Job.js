@@ -1,64 +1,57 @@
 import React, { useEffect, useState } from 'react';
 import { withRouter } from 'react-router-dom';
-import IndividualHeader from '.././IndividualHeader';
+import CategoryHeader from '../CategoryHeader';
+import EquipmentLabel from '../equipment/EquipmentLabel';
+import JobEditForm from './JobEditForm';
 
 import { connect } from 'react-redux';
 import PropTypes from 'prop-types';
 
 const Job = (props) => {
   const [job, setJob] = useState({});
+  const [jobEquipment, setJobEquipment] = useState([]);
+
   const jobId = props.match.params.id;
   const { jobs } = props.job;
+  const { equipment } = props.equipment;
 
   useEffect(() => {
+    // If user refreshes page
+    if (jobs.length === 0) {
+      props.history.push('/jobs');
+    }
+
     setJob(jobs.filter((job) => job._id === jobId)[0]);
+    setJobEquipment(equipment.filter((item) => item.equipLocationId === jobId));
 
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, []);
+  }, [jobs]);
 
   return (
     <div>
-      <IndividualHeader title={job.jobName} backRoute="jobs" />
+      <CategoryHeader
+        title={job.jobName}
+        backRoute="/jobs"
+        icon="fas fa-pen-square"
+        form={<JobEditForm jobId={jobId} />}
+      />
 
       <div className="job-body">
         <h1>Equipment</h1>
-        <div className="equip-label">
-          <div className="equip-img">
-            <img
-              src="https://cdn.ironpla.net/i/1935/235/1935235_3742_159_0001.jpg"
-              alt=""
-            ></img>
-          </div>
-
-          <div className="equip-text">
-            <div className="equip-header">
-              <h5 className="equip-brand">Bobcat</h5>
-              <h5 className="equip-model">T590</h5>
-            </div>
-            <div className="equip-location">
-              <h5>Location:</h5>
-              <h5>Tiffin Pointe</h5>
-            </div>
-          </div>
-        </div>
-        <div className="equip-label">
-          <div className="equip-img">
-            <img
-              src="https://images-na.ssl-images-amazon.com/images/I/613METIImuL._AC_SY355_.jpg"
-              alt=""
-            ></img>
-          </div>
-
-          <div className="equip-text">
-            <div className="equip-header">
-              <h5 className="equip-brand">Air Compressor #117</h5>
-              <h5 className="equip-model">&nbsp;</h5>
-            </div>
-            <div className="equip-location">
-              <h5>Location:</h5>
-              <h5>Tiffin Pointe</h5>
-            </div>
-          </div>
+        <div className="individual-job-list">
+          {jobEquipment.map((item) => {
+            return (
+              <EquipmentLabel
+                key={item._id}
+                id={item._id}
+                brand={item.equipBrand}
+                model={item.equipModel}
+                jobLocation={item.equipLocation}
+                img={'http://localhost:5000/' + item.equipImage}
+                available={item.available}
+              />
+            );
+          })}
         </div>
       </div>
     </div>
@@ -67,10 +60,12 @@ const Job = (props) => {
 
 Job.propTypes = {
   job: PropTypes.object.isRequired,
+  equipment: PropTypes.object.isRequired,
 };
 
 const mapStateToProps = (state) => ({
   job: state.job,
+  equipment: state.equipment,
 });
 
 export default connect(mapStateToProps)(withRouter(Job));

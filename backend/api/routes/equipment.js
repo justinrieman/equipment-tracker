@@ -36,6 +36,9 @@ router.get('/', (req, res, next) => {
   Equipment.find({ userId: userId })
     .exec()
     .then((docs) => {
+      docs.forEach((doc) =>
+        doc.available ? console.log(doc.available) : null
+      );
       const response = {
         equipment: docs.map((doc) => {
           return {
@@ -45,6 +48,8 @@ router.get('/', (req, res, next) => {
             equipModel: doc.equipModel,
             equipImage: doc.equipImage,
             equipLocation: doc.equipLocation,
+            equipLocationId: doc.equipLocationId,
+            available: doc.available ? doc.available : false,
           };
         }),
       };
@@ -62,6 +67,8 @@ router.get('/:equipmentId', (req, res, next) => {
 });
 
 router.post('/', upload.single('equipImage'), (req, res, next) => {
+  console.log(req.body);
+  console.log(req.body.equipLocation === '');
   const equipment = new Equipment({
     _id: new mongoose.Types.ObjectId(),
     userId: req.body.userId,
@@ -95,9 +102,86 @@ router.post('/', upload.single('equipImage'), (req, res, next) => {
     });
 });
 
-router.patch('/:equipmentId', (req, res, next) => {
+router.patch('/:equipmentId', upload.single('equipImage'), (req, res, next) => {
   const equipmentId = req.params.equipmentId;
-  res.status(200).json({ message: `PATCH request for ${equipmentId}` });
+
+  console.log(req.body);
+  console.log(req.file);
+
+  let updatedEquipment = {
+    _id: equipmentId,
+    userId: req.body.userId,
+    equipType: req.body.equipType,
+    equipBrand: req.body.equipBrand,
+    equipModel: req.body.equipModel,
+    equipImage: req.file ? req.file.path : req.body.equipImage,
+    equipLocation: req.body.equipLocation,
+  };
+
+  // equipLocationId is only added if there is a location
+  // it is a mongo id found on the frontend
+
+  if (updatedEquipment.equipLocation) {
+    updatedEquipment.equipLocationId = req.body.equipLocationId;
+  }
+
+  Equipment.findOneAndUpdate({ _id: equipmentId }, updatedEquipment, {
+    new: true,
+  })
+    .then((doc) => {
+      res.status(201).json({
+        message: 'Equipment updated successfully',
+        updatedEquipment: {
+          _id: doc._id,
+          userId: doc.userId,
+          equipType: doc.equipType,
+          equipBrand: doc.equipBrand,
+          equipModel: doc.equipModel,
+          equipImage: doc.equipImage,
+          equipLocation: doc.equipLocation,
+          equipLocationId: doc.equipLocationId,
+        },
+      });
+    })
+    .catch((err) => {
+      res.status(500).json({ error: err });
+    });
+});
+
+router.patch('/available/:equipmentId', (req, res, next) => {
+  const equipmentId = req.params.equipmentId;
+
+  Equipment.findByIdAndUpdate(
+    { _id: equipmentId },
+    { available: true },
+    { new: true }
+  ).then((doc) => {
+    res.status(201).json({ doc });
+  });
+});
+
+router.patch('/unavailable/:equipmentId', (req, res, next) => {
+  const equipmentId = req.params.equipmentId;
+
+  Equipment.findByIdAndUpdate(
+    { _id: equipmentId },
+    { available: false },
+    { new: true }
+  ).then((doc) => {
+    res.status(201).json({ doc });
+  });
+});
+
+router.delete('/:equipmentId', (req, res, next) => {
+  Equipment.findById(req.params.equipmentId)
+    .then((item) => {
+      item.remove().then(() => {
+        res.json({ message: 'Equipment deleted successfully' });
+      });
+    })
+    .catch((err) => {
+      res.status(404).json({ err });
+    });
 });
 
 module.exports = router;
