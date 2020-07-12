@@ -9,6 +9,7 @@ const equipmentSchema = new mongoose.Schema({
   equipImage: String,
   equipLocation: String,
   equipLocationId: { type: mongoose.Schema.Types.ObjectId, ref: 'Job' },
+  rentalDate: String,
   available: Boolean,
 });
 

@@ -33,7 +33,7 @@ const ShoringList = (props) => {
       />
       <div className="job-body">
         {shoringList.length === 0 && <h1>No shoring available.</h1>}
-        <div className="individual-job-list">
+        <div className="equip-list">
           {equipment
             .filter((item) => item.equipType === 'shoring')
             .map((item) => {
@@ -49,6 +49,7 @@ const ShoringList = (props) => {
                 />
               );
             })}
+          <div className="equip-filler"></div>
         </div>
       </div>
     </div>

@@ -50,6 +50,7 @@ router.get('/', (req, res, next) => {
             equipLocation: doc.equipLocation,
             equipLocationId: doc.equipLocationId,
             available: doc.available ? doc.available : false,
+            rentalDate: doc.rentalDate,
           };
         }),
       };
@@ -78,6 +79,8 @@ router.post('/', upload.single('equipImage'), (req, res, next) => {
     equipImage: req.file ? req.file.path : 'uploads/no-img.png',
     equipLocation: req.body.equipLocation,
     equipLocationId: req.body.equipLocationId,
+    available: false,
+    rentalDate: req.body.rentalDate,
   });
 
   equipment
@@ -94,11 +97,13 @@ router.post('/', upload.single('equipImage'), (req, res, next) => {
           equipImage: result.equipImage,
           equipLocation: result.equipLocation,
           equipLocationId: result.equipLocationId,
+          rentalDate: result.rentalDate,
         },
       });
     })
     .catch((err) => {
       res.status(500).json({ error: err });
+      console.log(err);
     });
 });
 
@@ -116,6 +121,7 @@ router.patch('/:equipmentId', upload.single('equipImage'), (req, res, next) => {
     equipModel: req.body.equipModel,
     equipImage: req.file ? req.file.path : req.body.equipImage,
     equipLocation: req.body.equipLocation,
+    rentalDate: req.body.rentalDate,
   };
 
   // equipLocationId is only added if there is a location
@@ -140,6 +146,7 @@ router.patch('/:equipmentId', upload.single('equipImage'), (req, res, next) => {
           equipImage: doc.equipImage,
           equipLocation: doc.equipLocation,
           equipLocationId: doc.equipLocationId,
+          rentalDate: doc.rentalDate,
         },
       });
     })

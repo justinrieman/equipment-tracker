@@ -25,7 +25,7 @@ const CategoryHeader = (props) => {
         <div
           className="category-back"
           onClick={() => {
-            props.history.push(props.backRoute);
+            props.history.goBack();
           }}
         >
           <i className="fas fa-angle-double-left"></i>

@@ -23,10 +23,15 @@ const EquipmentPage = (props) => {
       let equip = equipment.filter((item) => item._id === equipId)[0];
       setCurrentEquip(equip);
 
-      // is the equipment available ? then have the box checked off already
-      if (equip.available) {
+      // This is for when a user deletes the equipment and hits the back button
+      // so in CategoryHeader the props.history.goBack() doesn't return to this page
+      if (!equip) {
+        props.history.push('/equipment');
+      } else if (equip.available) {
         document.getElementById('availableCheck').checked = true;
       }
+
+      console.log(equip);
     }
 
     // eslint-disable-next-line react-hooks/exhaustive-deps
@@ -49,7 +54,6 @@ const EquipmentPage = (props) => {
     <div>
       <CategoryHeader
         title={currentEquip.equipBrand}
-        backRoute={`/equipment/${currentEquip.equipType}`}
         icon="fas fa-pen-square"
         form={<EquipmentEditForm equipId={equipId} />}
       />
@@ -74,6 +78,12 @@ const EquipmentPage = (props) => {
             <h2 className="table-label">Location</h2>
             <h2 className="table-value">{currentEquip.equipLocation}</h2>
           </div>
+          {currentEquip.equipType === 'rental' && (
+            <div className="table-section">
+              <h2 className="table-label">Date Rented</h2>
+              <h2 className="table-value">{currentEquip.rentalDate}</h2>
+            </div>
+          )}
           <div className="table-section">
             <div className="switch-container">
               <h2 className="switch-text">Mark as available</h2>
@@ -91,33 +101,6 @@ const EquipmentPage = (props) => {
             </div>
           </div>
         </div>
-
-        {/* <div className="check-container-container">
-          <label className="check-container">
-            <input
-              className="checkbox"
-              id="availableCheck"
-              type="checkbox"
-              onChange={handleCheck}
-            ></input>
-            <span className="checkmark"></span>
-            Mark as available
-          </label>
-        </div> */}
-        {/* <div className="switch-container">
-          <div className="switch">
-            <input
-              id="availableCheck"
-              type="checkbox"
-              className="switch-input"
-              onChange={handleCheck}
-            />
-            <label htmlFor="availableCheck" className="switch-label">
-              Switch
-            </label>
-          </div>
-          <h2 className="switch-text">Mark as available</h2>
-        </div> */}
       </div>
     </div>
   );

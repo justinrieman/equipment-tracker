@@ -34,7 +34,7 @@ const JobList = (props) => {
         form={<JobForm />}
       />
       <div className="job-list">
-        {jobs.map((job) => {
+        {jobs.sort().map((job) => {
           return (
             <JobLabel
               key={job._id}

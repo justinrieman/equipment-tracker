@@ -35,7 +35,7 @@ const RentalList = (props) => {
       />
       <div className="job-body">
         {rentalList.length === 0 && <h1>No rentals available.</h1>}
-        <div className="individual-job-list">
+        <div className="equip-list">
           {equipment
             .filter((item) => item.equipType === 'rental')
             .map((item) => {
@@ -51,6 +51,7 @@ const RentalList = (props) => {
                 />
               );
             })}
+          <div className="equip-filler"></div>
         </div>
       </div>
     </div>

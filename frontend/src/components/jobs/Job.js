@@ -21,8 +21,16 @@ const Job = (props) => {
       props.history.push('/jobs');
     }
 
-    setJob(jobs.filter((job) => job._id === jobId)[0]);
+    let job = jobs.filter((job) => job._id === jobId)[0];
+
+    setJob(job);
     setJobEquipment(equipment.filter((item) => item.equipLocationId === jobId));
+
+    // This is for when a user deletes the equipment and hits the back button
+    // so in CategoryHeader the props.history.goBack() doesn't return to this page
+    if (!job) {
+      props.history.push('/');
+    }
 
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [jobs]);
@@ -37,8 +45,25 @@ const Job = (props) => {
       />
 
       <div className="job-body">
-        <h1>Equipment</h1>
-        <div className="individual-job-list">
+        <h1 className="job-page-title">Job Info</h1>
+        <div className="job-info-section">
+          <div className="equip-page-table">
+            <div className="table-section">
+              <h2 className="table-label">Job Name</h2>
+              <h2 className="table-value">{job.jobName}</h2>
+            </div>
+            <div className="table-section">
+              <h2 className="table-label">Job Number</h2>
+              <h2 className="table-value">{job.jobNumber}</h2>
+            </div>
+            <div className="table-section">
+              <h2 className="table-label">Address</h2>
+              <h2 className="table-value">{job.jobAddress}</h2>
+            </div>
+          </div>
+        </div>
+        <h1 className="job-page-title">Equipment</h1>
+        <div className="equip-list">
           {jobEquipment.map((item) => {
             return (
               <EquipmentLabel
@@ -52,6 +77,7 @@ const Job = (props) => {
               />
             );
           })}
+          <div className="equip-filler"></div>
         </div>
       </div>
     </div>

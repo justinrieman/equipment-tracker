@@ -3,6 +3,10 @@
 
 import React, { useState, createRef } from 'react';
 
+// For equipType === rental
+import DatePicker from 'react-datepicker';
+import 'react-datepicker/dist/react-datepicker.css';
+
 // Redux Stuff
 import { connect } from 'react-redux';
 import PropTypes from 'prop-types';
@@ -23,8 +27,11 @@ const EquipmentForm = (props) => {
   });
   const [error, setError] = useState(null);
 
+  // For rental Date
+  const [startDate, setStartDate] = useState(new Date());
+
   //Catpitalize First Letter of equipType to use as title
-  // if equip type is other than use Item
+  // if equip type is other then use Item
   const equipTypeTitle =
     props.equipType === 'other'
       ? 'Item'
@@ -82,8 +89,14 @@ const EquipmentForm = (props) => {
       fd.append('equipModel', equipmentFormData.equipModel);
       fd.append('equipImage', equipmentFormData.equipImage);
       fd.append('equipLocation', equipmentFormData.equipLocation);
+      fd.append('available', false);
       equipmentFormData.equipLocation &&
         fd.append('equipLocationId', equipLocationId);
+
+      if (props.equipType === 'rental') {
+        let rentalDate = document.querySelector('.date-picker').value;
+        fd.append('rentalDate', rentalDate);
+      }
 
       props.addEquipment(fd);
       props.close();
@@ -144,6 +157,26 @@ const EquipmentForm = (props) => {
             );
           })}
         </select>
+        {props.equipType === 'rental' && (
+          <div>
+            <label className="form-label" htmlFor="rentalDate">
+              Rented Date
+            </label>
+            <div className="date-picker-wrapper">
+              <DatePicker
+                name="rentalDate"
+                className="date-picker"
+                showPopperArrow={false}
+                selected={startDate}
+                onChange={(date) => setStartDate(date)}
+                calendarClassName="calendar"
+                dayClassName={(date) => 'day'}
+                weekDayClassName={(day) => 'weekday'}
+                dateFormat="MMMM d, yyyy"
+              />
+            </div>
+          </div>
+        )}
         <label className="form-label" htmlFor="equipImage">
           Select Image
         </label>

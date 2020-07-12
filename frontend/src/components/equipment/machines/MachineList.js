@@ -33,7 +33,7 @@ const MachineList = (props) => {
       />
       <div className="job-body">
         {machines.length === 0 && <h1>No machines available.</h1>}
-        <div className="individual-job-list">
+        <div className="equip-list">
           {equipment
             .filter((item) => item.equipType === 'machine')
             .map((item) => {
@@ -49,6 +49,7 @@ const MachineList = (props) => {
                 />
               );
             })}
+          <div className="equip-filler"></div>
         </div>
       </div>
     </div>

@@ -59,6 +59,7 @@ router.get('/:id', (req, res, next) => {
 });
 
 router.post('/', (req, res, next) => {
+  console.log(req.body);
   const job = new Job({
     _id: new mongoose.Types.ObjectId(),
     userId: req.body.userId,
@@ -85,6 +86,7 @@ router.post('/', (req, res, next) => {
     })
     .catch((err) => {
       res.status(500).json({ error: err });
+      console.log(err);
     });
 });
 

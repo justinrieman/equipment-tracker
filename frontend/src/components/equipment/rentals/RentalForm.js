@@ -1,4 +1,7 @@
 import React, { useState } from 'react';
+import DatePicker from 'react-datepicker';
+
+import 'react-datepicker/dist/react-datepicker.css';
 
 import { connect } from 'react-redux';
 import PropTypes from 'prop-types';
@@ -15,6 +18,7 @@ const RentalForm = (props) => {
     equipImage: null,
     equipLocation: '',
   });
+  const [startDate, setStartDate] = useState(new Date());
 
   const handleImageSelection = (e) => {
     const file = e.target.files[0];
@@ -46,9 +50,9 @@ const RentalForm = (props) => {
 
   const addMachine = (e) => {
     e.preventDefault();
+    let rentalDate = document.querySelector('.date-picker').value;
 
     // to get equipLocationId
-
     let equipLocationId;
 
     if (machineFormData.equipLocation) {
@@ -66,7 +70,9 @@ const RentalForm = (props) => {
     fd.append('equipModel', machineFormData.equipModel);
     fd.append('equipImage', machineFormData.equipImage);
     fd.append('equipLocation', machineFormData.equipLocation);
-    fd.append('equipLocationId', equipLocationId);
+    machineFormData.equipLocation &&
+      fd.append('equipLocationId', equipLocationId);
+    fd.append('rentalDate', rentalDate);
 
     props.addEquipment(fd);
     props.close();
@@ -76,7 +82,7 @@ const RentalForm = (props) => {
     <div className="form-container">
       <div className="form-header">
         <div className="form-close"></div>
-        <h1 className="form-title">New Machine</h1>
+        <h1 className="form-title">New Rental</h1>
         <div className="form-close" onClick={props.close}>
           <i className="fas fa-times"></i>
         </div>
@@ -125,6 +131,22 @@ const RentalForm = (props) => {
             );
           })}
         </select>
+        <label className="form-label" htmlFor="rentalDate">
+          Rented Date
+        </label>
+        <div className="date-picker-wrapper">
+          <DatePicker
+            name="rentalDate"
+            className="date-picker"
+            showPopperArrow={false}
+            selected={startDate}
+            onChange={(date) => setStartDate(date)}
+            calendarClassName="calendar"
+            dayClassName={(date) => 'day'}
+            weekDayClassName={(day) => 'weekday'}
+            dateFormat="MMMM d, yyyy"
+          />
+        </div>
         <label className="form-label" htmlFor="equipImage">
           Select Image
         </label>

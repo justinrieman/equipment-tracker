@@ -27,7 +27,9 @@ export const getEquipment = () => (dispatch) => {
 };
 
 export const addEquipment = (formData) => (dispatch) => {
+  console.log(formData);
   axios.post('http://localhost:5000/equipment', formData).then((res) => {
+    console.log(res.data.createdEquipment);
     dispatch({
       type: ADD_EQUIPMENT,
       payload: res.data.createdEquipment,
