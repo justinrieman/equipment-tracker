@@ -60,7 +60,6 @@ const RentalForm = (props) => {
         (job) => job.jobName === machineFormData.equipLocation
       );
       equipLocationId = selectedJob[0]._id;
-      console.log(equipLocationId);
     }
 
     const fd = new FormData();

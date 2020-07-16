@@ -5,6 +5,8 @@ import {
   ADD_EQUIPMENT,
   UPDATE_EQUIPMENT,
   DELETE_EQUIPMENT,
+  UPDATE_ATTACHMENT,
+  MARK_MAINTENANCE,
   MARK_AVAILABLE,
   MARK_UNAVAILABLE,
 } from '../types';
@@ -27,9 +29,7 @@ export const getEquipment = () => (dispatch) => {
 };
 
 export const addEquipment = (formData) => (dispatch) => {
-  console.log(formData);
   axios.post('http://localhost:5000/equipment', formData).then((res) => {
-    console.log(res.data.createdEquipment);
     dispatch({
       type: ADD_EQUIPMENT,
       payload: res.data.createdEquipment,
@@ -40,6 +40,7 @@ export const addEquipment = (formData) => (dispatch) => {
 export const updateEquipment = (equipId, equip) => (dispatch) => {
   axios
     .patch(`http://localhost:5000/equipment/${equipId}`, equip)
+
     .then((res) => {
       dispatch({
         type: UPDATE_EQUIPMENT,
@@ -57,9 +58,19 @@ export const deleteEquipment = (id) => (dispatch) => {
   });
 };
 
+export const updateAttachment = (id, attachments) => (dispatch) => {
+  axios
+    .patch(`http://localhost:5000/equipment/attachments/${id}`, attachments)
+    .then((res) => {
+      dispatch({
+        type: UPDATE_ATTACHMENT,
+        payload: res.data.doc,
+      });
+    });
+};
+
 export const markAvailable = (id) => (dispatch) => {
   axios.patch(`http://localhost:5000/equipment/available/${id}`).then((res) => {
-    console.log(res);
     dispatch({
       type: MARK_AVAILABLE,
       payload: id,
@@ -71,10 +82,23 @@ export const markUnavailable = (id) => (dispatch) => {
   axios
     .patch(`http://localhost:5000/equipment/unavailable/${id}`)
     .then((res) => {
-      console.log(res);
       dispatch({
         type: MARK_UNAVAILABLE,
         payload: id,
+      });
+    });
+};
+
+export const markMaintenance = (id, checked) => (dispatch) => {
+  console.log(checked);
+  axios
+    .patch(`http://localhost:5000/equipment/maintenance/${id}`, {
+      maintenance: checked,
+    })
+    .then((res) => {
+      dispatch({
+        type: MARK_MAINTENANCE,
+        payload: res.data.doc,
       });
     });
 };

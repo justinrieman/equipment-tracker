@@ -90,6 +90,8 @@ const EquipmentForm = (props) => {
       fd.append('equipImage', equipmentFormData.equipImage);
       fd.append('equipLocation', equipmentFormData.equipLocation);
       fd.append('available', false);
+      fd.append('needsMaintenance', false);
+      fd.append('attachments', []);
       equipmentFormData.equipLocation &&
         fd.append('equipLocationId', equipLocationId);
 

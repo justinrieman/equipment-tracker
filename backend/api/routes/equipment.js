@@ -50,7 +50,11 @@ router.get('/', (req, res, next) => {
             equipLocation: doc.equipLocation,
             equipLocationId: doc.equipLocationId,
             available: doc.available ? doc.available : false,
+            needsMaintenance: doc.needsMaintenance
+              ? doc.needsMaintenance
+              : false,
             rentalDate: doc.rentalDate,
+            attachments: doc.attachments,
           };
         }),
       };
@@ -68,8 +72,6 @@ router.get('/:equipmentId', (req, res, next) => {
 });
 
 router.post('/', upload.single('equipImage'), (req, res, next) => {
-  console.log(req.body);
-  console.log(req.body.equipLocation === '');
   const equipment = new Equipment({
     _id: new mongoose.Types.ObjectId(),
     userId: req.body.userId,
@@ -80,7 +82,9 @@ router.post('/', upload.single('equipImage'), (req, res, next) => {
     equipLocation: req.body.equipLocation,
     equipLocationId: req.body.equipLocationId,
     available: false,
+    needsMaintenance: false,
     rentalDate: req.body.rentalDate,
+    attachments: [],
   });
 
   equipment
@@ -97,7 +101,10 @@ router.post('/', upload.single('equipImage'), (req, res, next) => {
           equipImage: result.equipImage,
           equipLocation: result.equipLocation,
           equipLocationId: result.equipLocationId,
+          available: result.available,
+          needsMaintenance: result.needsMaintenance,
           rentalDate: result.rentalDate,
+          attachments: result.attachments,
         },
       });
     })
@@ -110,9 +117,6 @@ router.post('/', upload.single('equipImage'), (req, res, next) => {
 router.patch('/:equipmentId', upload.single('equipImage'), (req, res, next) => {
   const equipmentId = req.params.equipmentId;
 
-  console.log(req.body);
-  console.log(req.file);
-
   let updatedEquipment = {
     _id: equipmentId,
     userId: req.body.userId,
@@ -122,6 +126,9 @@ router.patch('/:equipmentId', upload.single('equipImage'), (req, res, next) => {
     equipImage: req.file ? req.file.path : req.body.equipImage,
     equipLocation: req.body.equipLocation,
     rentalDate: req.body.rentalDate,
+    attachments: req.body.attachments ? req.body.attachments : [],
+    available: req.body.available,
+    needsMaintenance: req.body.needsMaintenance,
   };
 
   // equipLocationId is only added if there is a location
@@ -147,12 +154,29 @@ router.patch('/:equipmentId', upload.single('equipImage'), (req, res, next) => {
           equipLocation: doc.equipLocation,
           equipLocationId: doc.equipLocationId,
           rentalDate: doc.rentalDate,
+          attachments: doc.attachments,
+          available: doc.available,
+          needsMaintenance: doc.needsMaintenance,
         },
       });
     })
     .catch((err) => {
       res.status(500).json({ error: err });
     });
+});
+
+router.patch('/attachments/:equipmentId', (req, res, next) => {
+  const equipmentId = req.params.equipmentId;
+
+  const attachments = req.body;
+
+  Equipment.findByIdAndUpdate(
+    { _id: equipmentId },
+    { attachments: attachments },
+    { new: true }
+  ).then((doc) => {
+    res.status(201).json({ doc });
+  });
 });
 
 router.patch('/available/:equipmentId', (req, res, next) => {
@@ -177,6 +201,31 @@ router.patch('/unavailable/:equipmentId', (req, res, next) => {
   ).then((doc) => {
     res.status(201).json({ doc });
   });
+});
+
+router.patch('/maintenance/:equipmentId', (req, res, next) => {
+  const equipmentId = req.params.equipmentId;
+  const maintenance = req.body.maintenance;
+
+  if (maintenance) {
+    Equipment.findByIdAndUpdate(
+      { _id: equipmentId },
+      { needsMaintenance: true },
+      { new: true }
+    ).then((doc) => {
+      res.status(201).json({ doc });
+    });
+  }
+
+  if (!maintenance) {
+    Equipment.findByIdAndUpdate(
+      { _id: equipmentId },
+      { needsMaintenance: false },
+      { new: true }
+    ).then((doc) => {
+      res.status(201).json({ doc });
+    });
+  }
 });
 
 router.delete('/:equipmentId', (req, res, next) => {

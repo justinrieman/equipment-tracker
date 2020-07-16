@@ -5,6 +5,8 @@ import {
   DELETE_EQUIPMENT,
   MARK_AVAILABLE,
   MARK_UNAVAILABLE,
+  MARK_MAINTENANCE,
+  UPDATE_ATTACHMENT,
 } from '../types';
 
 const initialState = {
@@ -37,6 +39,15 @@ export default function (state = initialState, action) {
           (item) => item._id !== action.payload
         ),
       };
+    case UPDATE_ATTACHMENT:
+      return {
+        ...state,
+        equipment: state.equipment.map((item) =>
+          item._id === action.payload._id
+            ? { ...item, attachments: action.payload.attachments }
+            : item
+        ),
+      };
     case MARK_AVAILABLE:
       return {
         ...state,
@@ -49,6 +60,15 @@ export default function (state = initialState, action) {
         ...state,
         equipment: state.equipment.map((item) =>
           item._id === action.payload ? { ...item, available: false } : item
+        ),
+      };
+    case MARK_MAINTENANCE:
+      return {
+        ...state,
+        equipment: state.equipment.map((item) =>
+          item._id === action.payload._id
+            ? { ...item, needsMaintenance: action.payload.needsMaintenance }
+            : item
         ),
       };
     default:

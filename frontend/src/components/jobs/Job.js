@@ -47,7 +47,7 @@ const Job = (props) => {
       <div className="job-body">
         <h1 className="job-page-title">Job Info</h1>
         <div className="job-info-section">
-          <div className="equip-page-table">
+          <div className="equip-page-table job-table">
             <div className="table-section">
               <h2 className="table-label">Job Name</h2>
               <h2 className="table-value">{job.jobName}</h2>
@@ -58,7 +58,7 @@ const Job = (props) => {
             </div>
             <div className="table-section">
               <h2 className="table-label">Address</h2>
-              <h2 className="table-value">{job.jobAddress}</h2>
+              <h2 className="table-value">{job.address}</h2>
             </div>
           </div>
         </div>
@@ -74,6 +74,7 @@ const Job = (props) => {
                 jobLocation={item.equipLocation}
                 img={'http://localhost:5000/' + item.equipImage}
                 available={item.available}
+                needsMaintenance={item.needsMaintenance}
               />
             );
           })}

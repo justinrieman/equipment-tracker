@@ -48,6 +48,7 @@ const RentalList = (props) => {
                   jobLocation={item.equipLocation}
                   img={'http://localhost:5000/' + item.equipImage}
                   available={item.available}
+                  needsMaintenance={item.needsMaintenance}
                 />
               );
             })}

@@ -1,3 +1,5 @@
+/************************** Login/Signup  *******************************/
+
 .signup-container {
   width: 100vw;
   height: 100vh;
@@ -89,6 +91,9 @@
   margin: 0 0.5rem;
   padding: 0;
 }
+
+/************************** End Login/Signup  *******************************/
+
 /* HomeScreen / Category Section */
 
 .categories {
@@ -271,7 +276,7 @@
   margin-top: 7vh;
 }
 
-/******* Equipment List and Labels ********/
+/******************************* Start Equipment List and Labels **************************************/
 
 .equip-list {
   position: relative;
@@ -293,31 +298,35 @@
   cursor: pointer;
 }
 
-.equip-text {
-  flex: 1;
-  font-size: 1rem;
-  height: 20vh;
+.equip-label:hover .equip-label-header {
+  background-color: rgb(62, 62, 62);
+  color: rgb(114, 214, 211);
 }
 
-.equip-header {
-  background-color: black;
+.equip-label-container {
+  flex: 1;
+  font-size: 1rem;
+}
+
+.equip-label-header {
+  background-color: rgb(38, 38, 38);
   color: white;
   border-top-right-radius: 5px;
 }
 
-.equip-brand {
+.equip-label-brand {
   margin: 0;
   padding: 0.5rem;
   display: inline-block;
 }
 
-.equip-model {
+.equip-label-model {
   margin: 0;
   display: inline-block;
   color: rgb(164, 164, 164);
 }
 
-.equip-img {
+.equip-label-img {
   height: 12vh;
   width: 25vw;
 }
@@ -335,14 +344,26 @@
 }
 
 .equip-location {
-  flex: 2;
+  flex: 3;
+}
+
+.equip-location-location {
+  text-decoration: underline;
+  color: rgb(45, 45, 45);
 }
 
 .equip-available {
   align-self: flex-end;
   justify-self: flex-end;
-  flex: 1;
+  flex: 2;
   color: green;
+}
+
+.equip-broke {
+  align-self: flex-end;
+  justify-self: flex-end;
+  flex: 2;
+  color: rgb(145, 30, 30);
 }
 
 @media screen and (min-width: 760px) {
@@ -361,7 +382,7 @@
     width: 45vw;
   }
 
-  .equip-img {
+  .equip-label-img {
     height: 17vh;
     width: 17vw;
   }
@@ -391,7 +412,7 @@
     width: 45vw;
   }
 
-  .equip-img {
+  .equip-label-img {
     height: 20vh;
     width: 20vw;
   }
@@ -406,7 +427,7 @@
 }
 
 @media screen and (min-height: 940px) {
-  .equip-img {
+  .equip-label-img {
     height: 17vh;
   }
 
@@ -416,7 +437,7 @@
 }
 
 @media screen and (min-height: 1060px) {
-  .equip-img {
+  .equip-label-img {
     height: 15vh;
   }
 
@@ -426,7 +447,7 @@
 }
 
 @media screen and (min-height: 1230px) {
-  .equip-img {
+  .equip-label-img {
     height: 12vh;
   }
 
@@ -435,7 +456,7 @@
   }
 }
 
-.equip-img img {
+.equip-label-img img {
   width: 100%;
   height: 100%;
   object-fit: cover;
@@ -443,12 +464,14 @@
   border-bottom-left-radius: 5px;
 }
 
-/* Equipment Page */
+/******************************* End Equipment List and Labels **************************************/
+
+/***************************** Individual Equipment Page ****************************************/
 
 .equip-page-body {
   position: absolute;
   top: 15vh;
-  height: 85vh;
+  height: 77vh;
   width: 100vw;
   overflow: scroll;
 }
@@ -466,16 +489,57 @@
   border-radius: 5px;
 }
 
+/* Information Table */
+
 .equip-page-table {
   width: 90vw;
   max-width: 500px;
   margin: auto;
+  background-color: white;
   box-shadow: 0px 0 2px rgba(126, 126, 126, 0.523);
+  margin-bottom: 8rem;
+}
+
+.job-table {
+  margin-bottom: 0;
 }
 
 .table-section {
   padding: 0.7rem 1rem;
   border-bottom: 1px solid lightgrey;
+}
+
+.table-section-flex {
+  display: flex;
+}
+
+.table-section-flex h2 {
+  flex: 1;
+}
+
+.table-delete {
+  font-size: 1.2rem;
+  padding-right: 0.2rem;
+}
+
+.table-add {
+  padding: 0;
+  font-size: 1.5rem;
+  border: none;
+  background-color: white;
+  outline: none;
+}
+
+.table-delete:hover {
+  color: rgb(145, 30, 30);
+}
+
+.table-add:hover {
+  color: #89c12d;
+}
+
+.table-section i:hover {
+  cursor: pointer;
 }
 
 .table-label {
@@ -485,6 +549,72 @@
 
 .table-value {
   margin: 0.3rem 0;
+}
+
+.table-input {
+  border: none;
+  outline-style: none;
+  font-size: 0.9rem;
+  flex: 1;
+}
+
+.table-comments {
+  max-height: 30vh;
+  overflow: scroll;
+  padding-bottom: 1rem;
+  border-bottom: 1.5rem solid rgb(220, 220, 220);
+  background: rgb(220, 220, 220);
+  background: linear-gradient(
+    0deg,
+    rgba(220, 220, 220, 1) 0%,
+    rgba(180, 180, 180, 1) 100%
+  );
+}
+
+.comment {
+  margin: 10px 0;
+  font-size: 0.85rem;
+  padding: 0.5rem;
+  padding-bottom: 0;
+  border-radius: 5px;
+  background-color: white;
+}
+
+.comment-name {
+  display: inline-block;
+  margin: 0;
+  font-size: 1.1rem;
+  font-weight: 600;
+}
+
+.comment-time {
+  font-weight: 600;
+  color: rgb(45, 45, 45);
+  margin: 0 1rem;
+  display: inline-block;
+}
+
+.comment-text {
+  margin: 0.5rem 0.2rem 0.3rem;
+  padding-bottom: 0.7rem;
+  /* border-bottom: 1px solid black; */
+}
+
+.table-comment-container {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+}
+
+.table-comment-container input {
+  border-bottom: 1px solid rgb(172, 170, 170);
+}
+
+.table-comment-container textarea {
+  padding-top: 0.5rem;
+  font-family: inherit;
+  flex: 3;
+  max-width: 436px;
 }
 
 .switch-container {
@@ -538,6 +668,11 @@
 .switch-input:checked + .switch-label::before {
   background-color: #89c12d;
 }
+
+.maintenance-switch:checked + .switch-label::before {
+  background-color: rgb(145, 30, 30);
+}
+
 .switch-input:checked + .switch-label::after {
   left: 24px;
 }
@@ -551,9 +686,87 @@
   font-weight: 500;
 }
 
-/* End Equipment Page */
+/* End Information Table */
 
-/* Forms */
+/* Start Footer */
+
+.equip-page-footer {
+  position: fixed;
+  bottom: 0;
+  height: 8vh;
+  width: 100vw;
+  background-color: rgb(38, 38, 38);
+}
+
+.ep-foot-container {
+  margin: auto;
+  width: 100vw;
+  height: 8vh;
+  display: flex;
+  justify-content: space-around;
+}
+
+.ep-foot-btn {
+  color: white;
+  width: 100%;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.ep-foot-btn i {
+  font-size: 1.2rem;
+}
+
+.ep-foot-btn:hover {
+  cursor: pointer;
+  background-color: rgb(62, 62, 62);
+  color: rgb(114, 214, 211);
+}
+
+.line {
+  height: 8vh;
+  border-right: 1px solid rgba(186, 186, 186, 0.479);
+}
+
+/* End Footer */
+
+@media screen and (min-width: 1100px) {
+  .equip-page-container {
+    display: flex;
+    width: 100vw;
+    justify-content: space-around;
+    margin-top: 5vh;
+  }
+
+  .equip-page-title {
+    padding-bottom: 1rem;
+    border-bottom: 2px solid rgb(203, 203, 203);
+    width: 30vw;
+    margin: 0 auto 2rem;
+  }
+
+  .equip-extras {
+    flex: 1;
+    padding: 0 2rem 0 0;
+  }
+
+  .equip-individual-img {
+    margin: 0;
+    padding: 3rem 3rem;
+    width: 30vw;
+    height: 40vh;
+    flex: 1;
+    max-width: 600px;
+  }
+}
+
+.equip-page-container h1 {
+  text-align: center;
+}
+/*********************************** End Individual Equipment Page ***********************************/
+
+/***************************************** Forms ******************************************************/
 
 .Modal {
   background-color: rgba(0, 0, 0, 0.858);
@@ -719,6 +932,8 @@
   background-color: rgb(105, 23, 23);
   color: white;
 }
+
+/***************************************** End Forms ******************************************************/
 
 .sign-out {
   position: fixed;

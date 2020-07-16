@@ -29,12 +29,17 @@ const EquipmentEditForm = (props) => {
     let selectedEquipment = equipment.filter(
       (item) => item._id === props.equipId
     )[0];
+
+    console.log(selectedEquipment);
     setEquipFormData({
       equipType: selectedEquipment.equipType,
       equipBrand: selectedEquipment.equipBrand,
       equipModel: selectedEquipment.equipModel,
       equipImage: selectedEquipment.equipImage,
       equipLocation: '',
+      available: selectedEquipment.available,
+      needsMaintenance: selectedEquipment.needsMaintenance,
+      attachments: selectedEquipment.attachments,
     });
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
@@ -70,6 +75,8 @@ const EquipmentEditForm = (props) => {
   const handleSubmit = (e) => {
     e.preventDefault();
 
+    console.log(equipFormData);
+
     if (equipFormData.equipBrand.trim() === '') {
       setError('Must enter a brand or name');
       formRef.current.scrollTop = 0;
@@ -90,6 +97,12 @@ const EquipmentEditForm = (props) => {
       fd.append('equipModel', equipFormData.equipModel);
       fd.append('equipImage', equipFormData.equipImage);
       fd.append('equipLocation', equipFormData.equipLocation);
+      fd.append('available', equipFormData.available);
+      fd.append('needsMaintenance', equipFormData.needsMaintenance);
+
+      for (let i = 0; i < equipFormData.attachments.length; i++) {
+        fd.append('attachments[]', equipFormData.attachments[i]);
+      }
 
       equipFormData.equipLocation &&
         fd.append('equipLocationId', equipLocationId);
@@ -98,7 +111,6 @@ const EquipmentEditForm = (props) => {
       setError(null);
       props.close();
     }
-    // to get equipLocationId
   };
 
   const handleDelete = () => {
